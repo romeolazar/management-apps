@@ -2,8 +2,6 @@ version: '2'
 
 #here we create the volumes. We keep the same names for backup purpouses
 volumes:
-  portainer:
-    name: portainer
   homepage:
     name: homepage
   filerun:
@@ -21,24 +19,7 @@ networks:
         - subnet: 10.6.0.0/16
 
 services:
-  #Portainer: is an open source, platform agnostic tool for managing containerized applications.
-  portainer:
-    image: portainer/portainer-ee:latest
-    hostname: portainer
-    container_name: portainer
-    restart: always
-    command: -H unix:///var/run/docker.sock
-    ports:
-      - "9443:9443"
-      - "8000:8000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - 'portainer:/data'
-    environment:
-      - TZ=${TZ}
-    networks:
-      - internal-network
-  # Homepage - A modern (fully static, fast), secure (fully proxied), highly customizable application dashboard with integrations for more than 25 services and translations for over 15 languages. Easily configured via YAML files (or discovery via docker labels).
+ # Homepage - A modern (fully static, fast), secure (fully proxied), highly customizable application dashboard with integrations for more than 25 services and translations for over 15 languages. Easily configured via YAML files (or discovery via docker labels).
   homepage:
     image: ghcr.io/benphelps/homepage:latest
     container_name: homepage
