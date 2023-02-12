@@ -1,0 +1,93 @@
+version: '2'
+
+#here we create the volumes. We keep the same names for backup purpouses
+volumes:
+  portainer:
+    name: portainer
+  homepage:
+    name: homepage
+  filerun:
+    name: filerun
+  filerun_db:
+    name: filerun_db
+
+#we put all containers under the same newtwork
+networks:
+  internal-network:
+    driver: bridge
+    name: management_network
+    ipam:
+      config:
+        - subnet: 10.6.0.0/16
+
+services:
+  #Portainer: is an open source, platform agnostic tool for managing containerized applications.
+  portainer:
+    image: portainer/portainer-ee:latest
+    hostname: portainer
+    container_name: portainer
+    restart: always
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - "9443:9443"
+      - "8000:8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - 'portainer:/data'
+    environment:
+      - TZ=${TZ}
+    networks:
+      - internal-network
+  # Homepage - A modern (fully static, fast), secure (fully proxied), highly customizable application dashboard with integrations for more than 25 services and translations for over 15 languages. Easily configured via YAML files (or discovery via docker labels).
+  homepage:
+    image: ghcr.io/benphelps/homepage:latest
+    container_name: homepage
+    ports:
+      - 3000:3000
+    volumes:
+      - /home/cloud/homepage:/app/config # Make sure your local config directory exists
+      - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
+      - /mnt/data:/data
+      - /home/cloud:/os
+    networks:
+      - internal-network
+    restart: unless-stopped
+  # Speedtest Tracker - This prog
+  #FileRun: Self-Hosted File Sync and Sharing.
+  web:
+    image: filerun/filerun
+    container_name: filerun
+    environment:
+      FR_DB_HOST: db
+      FR_DB_PORT: 3306
+      FR_DB_NAME: filerun
+      FR_DB_USER: cloud
+      FR_DB_PASS: ${PASSWORD}
+      APACHE_RUN_USER: cloud
+      APACHE_RUN_USER_ID: ${PUID}
+      APACHE_RUN_GROUP: cloud
+      APACHE_RUN_GROUP_ID: ${PGID}
+    depends_on:
+      - db
+    ports:
+      - "8280:80"
+    volumes:
+      - 'filerun:/var/www/html'
+      - '${USERDIR}:/user-files'
+    networks:
+      - internal-network
+    restart: unless-stopped
+  #FileRun database
+  db:
+    image: mariadb:10.1
+    container_name: filerun_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${PASSWORD}
+      MYSQL_USER: cloud
+      MYSQL_PASSWORD: ${PASSWORD}
+      MYSQL_DATABASE: filerun
+    volumes:
+      - 'filerun_db:/var/lib/mysql'
+    networks:
+      - internal-network
+    restart: unless-stopped
