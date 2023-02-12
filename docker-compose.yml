@@ -14,9 +14,6 @@ networks:
   internal-network:
     driver: bridge
     name: management_network
-    ipam:
-      config:
-        - subnet: 10.6.0.0/16
 
 services:
  # Homepage - A modern (fully static, fast), secure (fully proxied), highly customizable application dashboard with integrations for more than 25 services and translations for over 15 languages. Easily configured via YAML files (or discovery via docker labels).
