@@ -5,11 +5,14 @@ volumes:
   filebrowser:
     name: filebrowser
 
-#we put all containers under the same network
+#we put all containers under the same network. this is the first stack that needs to be deployed.
 networks:
   internal-network:
-    external: true
+    driver: bridge
     name: virtual_net
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
 
 services:
  # Homepage - A modern (fully static, fast), secure (fully proxied), highly customizable application dashboard with integrations for more than 25 services and translations for over 15 languages. Easily configured via YAML files (or discovery via docker labels).
