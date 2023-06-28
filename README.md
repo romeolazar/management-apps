@@ -16,10 +16,10 @@ Portainer is an open source, platform agnostic tool for managing containerized a
 DockerHub: [portainer/portainer](https://hub.docker.com/r/portainer/portainer) \
 GitHub: [https://github.com/portainer/portainer](https://github.com/portainer/portainer)
 
-### [FileRun](https://www.filerun.com)
-Is a self-Hosted File Sync and Sharing \
-DockerHub: [afian/filerun](https://hub.docker.com/r/afian/filerun) \
-GitHub:[https://github.com/filerun/docker](https://github.com/filerun/docker)
+### [FileBrowser](https://filebrowser.org/)
+`filebrowser` provides a file managing interface within a specified directory and it can be used to upload, delete, preview, rename and edit your files. It allows the creation of multiple users and each user can have its own directory. It can be used as a standalone app. \
+DockerHub: [filebrowser/filebrowser](https://hub.docker.com/r/filebrowser/filebrowser) \
+GitHub:[filebrowser/filebrowser](https://github.com/filebrowser/filebrowser)
 
 ### [Homepage](https://gethomepage.dev/en/installation/)
 A modern (fully static, fast), secure (fully proxied), highly customizable application dashboard with integrations for more than 25 services and translations for over 15 languages. \
